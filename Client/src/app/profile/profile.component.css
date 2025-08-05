@@ -1,0 +1,8 @@
+:host {
+  display: block;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+img {
+  object-fit: cover;
+}

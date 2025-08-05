@@ -3,6 +3,9 @@ const Patient = require("../users/Patient");
 const Admin = require("../users/admin");
 const { validationResult } = require("express-validator");
 
+
+
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 //تسجيل الدخول لكلا المستخدمين
@@ -159,4 +162,43 @@ const adminLogin = async (req, res) => {
   }
 };
 
-module.exports = { login, signupDoctor, signupPatient, getProfile, adminLogin };
+const updateProfile = async (req, res) => {
+  const userId = req.user.id;
+  const role = req.user.role;
+  const updateData = req.body;
+
+  try {
+    let user;
+    if (role === 'doctor') {
+      user = await Doctor.findByIdAndUpdate(userId, updateData, { new: true }).select('-password');
+    } else if (role === 'patient') {
+      user = await Patient.findByIdAndUpdate(userId, updateData, { new: true }).select('-password');
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ message: 'Update failed', error: err });
+  }
+};
+
+// upload image
+const uploadImage = async (req, res) => {
+  const userId = req.user.id;
+  const role = req.user.role;
+  const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+
+  try {
+    let user;
+    if (role === 'doctor') {
+      user = await Doctor.findByIdAndUpdate(userId, { image: imageUrl }, { new: true }).select('-password');
+    } else if (role === 'patient') {
+      user = await Patient.findByIdAndUpdate(userId, { image: imageUrl }, { new: true }).select('-password');
+    }
+
+    res.status(200).json({ imageUrl, message: 'Image uploaded successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Upload failed', error: err });
+  }
+};
+
+module.exports = { login, signupDoctor, signupPatient, getProfile, adminLogin,updateProfile,uploadImage};

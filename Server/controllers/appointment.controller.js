@@ -46,8 +46,8 @@ const getAppointmentById = async (req, res) => {
   }
   try {
     const appointment = await Appointment.findById(req.params.id)
-      .populate("doctor_id", "name email ")
-      .populate("patient_id", "name email ");
+      .populate("doctor_id", "name email image ")
+      .populate("patient_id", "name email  ");
     if (!appointment) {
       return res.status(404).json({ message: "Appointment not found" });
     }
@@ -161,7 +161,7 @@ const getMyAppointments = async (req, res) => {
       return res.status(403).json({ message: "Access denied" });
     }
     const appointments = await Appointment.find(query)
-      .populate("doctor_id", "name email ")
+      .populate("doctor_id", "name email image ")
       .populate("patient_id", "name email ");
     res.status(200).json(appointments);
   } catch (error) {

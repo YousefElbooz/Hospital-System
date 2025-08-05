@@ -1,0 +1,46 @@
+<div class="flex flex-col items-center justify-center gap-8 py-10 px-4 md:px-0 text-white">
+  @if (doctor; as d) {
+    <div class="bg-[#1c2c1b] rounded-3xl shadow-lg p-6 w-full max-w-md text-center border border-[#ADFF2F]">
+      <img [src]="d.image" alt="doctor" class="w-36 h-36 object-cover mx-auto rounded-lg mb-4" />
+      <h2 class="text-2xl font-bold mb-1">Dr. {{ d.name }}</h2>
+      <p><strong>Specialization:</strong> {{ d.specialization }}</p>
+      <p><strong>Email:</strong> {{ d.email }}</p>
+      <p><strong>Phone:</strong> {{ d.phone }}</p>
+    </div>
+  }
+
+  <div class="bg-[#1c2c1b] rounded-3xl shadow-lg p-6 w-full max-w-md border border-[#ADFF2F]">
+    <h3 class="text-xl font-semibold mb-4 text-center">Book an Appointment</h3>
+
+    <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div>
+        <label for="appointment_date" class="block font-bold text-sm mb-1">Appointment Date</label>
+        <input
+          type="date"
+          id="appointment_date"
+          formControlName="appointment_date"
+          [class.border-red-500]="submitted && appointmentForm.controls['appointment_date'].invalid"
+          class="w-full p-2 rounded bg-[#27391C] text-white border-none outline-none"
+        />
+      </div>
+
+      <button type="submit" class="animated-button w-full">
+        <span class="circle"></span>
+        <span class="text">Book Now</span>
+        <svg class="arr-1" viewBox="0 0 46 16">
+          <path d="M30.6 0l1.4 1.4-6.6 6.6H46v2H25.4l6.6 6.6-1.4 1.4L22.6 8z" />
+        </svg>
+        <svg class="arr-2" viewBox="0 0 46 16">
+          <path d="M30.6 0l1.4 1.4-6.6 6.6H46v2H25.4l6.6 6.6-1.4 1.4L22.6 8z" />
+        </svg>
+      </button>
+    </form>
+
+    @if (successMessage) {
+      <p class="text-green-400 mt-3 text-center">{{ successMessage }}</p>
+    }
+    @if (errorMessage) {
+      <p class="text-red-400 mt-3 text-center">{{ errorMessage }}</p>
+    }
+  </div>
+</div>

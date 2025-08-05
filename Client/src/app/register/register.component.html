@@ -1,0 +1,81 @@
+<div class="auth-container">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-box">
+    <h2 class="auth-title">Create Account</h2>
+
+    <!-- Role -->
+    <label for="role">Register As</label>
+    <select id="role" formControlName="role" class="filter-select">
+      <option value="patient">Patient</option>
+      <option value="doctor">Doctor</option>
+    </select>
+
+    <!-- Name -->
+    <label for="name">Full Name</label>
+    <input id="name" type="text" formControlName="name" placeholder="John Doe" />
+
+    <!-- Email -->
+    <label for="email">Email Address</label>
+    <input id="email" type="email" formControlName="email" placeholder="you@example.com" />
+
+    <!-- Phone -->
+    <label for="phone">Phone Number</label>
+    <input id="phone" type="text" formControlName="phone" placeholder="0123456789" />
+
+    <!-- Gender -->
+    <label for="gender">Gender</label>
+    <select id="gender" formControlName="gender" class="filter-select">
+      <option value="">Select gender</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+
+    <!-- Date of Birth (always visible) -->
+    <label for="dateOfBirth">Date of Birth</label>
+    <input id="dateOfBirth" type="date" formControlName="dateOfBirth" />
+
+    <!-- Specialization (only shown when role is doctor) -->
+    <label
+      for="specialization"
+      [style.display]="registerForm.get('role')?.value === 'doctor' ? 'block' : 'none'"
+    >
+      Specialization
+    </label>
+    <input
+      id="specialization"
+      type="text"
+      formControlName="specialization"
+      placeholder="Cardiology"
+      [style.display]="registerForm.get('role')?.value === 'doctor' ? 'block' : 'none'"
+    />
+
+    <!-- Password -->
+    <label for="password">Password</label>
+    <input id="password" type="password" formControlName="password" placeholder="********" />
+
+    <!-- Confirm Password -->
+    <label for="confirmPassword">Confirm Password</label>
+    <input
+      id="confirmPassword"
+      type="password"
+      formControlName="confirmPassword"
+      placeholder="********"
+    />
+
+    <!-- Submit Button -->
+    <button type="submit" class="animated-button justify-center">
+      <span class="circle"></span>
+      <span class="text">Register</span>
+      <svg class="arr-1" viewBox="0 0 46 16">
+        <path d="M30.6 0l1.4 1.4-6.6 6.6H46v2H25.4l6.6 6.6-1.4 1.4L22.6 8z" />
+      </svg>
+      <svg class="arr-2" viewBox="0 0 46 16">
+        <path d="M30.6 0l1.4 1.4-6.6 6.6H46v2H25.4l6.6 6.6-1.4 1.4L22.6 8z" />
+      </svg>
+    </button>
+
+    <p class="auth-footer">
+      Already have an account?
+      <a routerLink="/auth/login">Login here</a>
+    </p>
+  </form>
+</div>

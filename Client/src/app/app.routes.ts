@@ -9,8 +9,10 @@ import { AppointmentsComponent } from './appointments/appointments.component';
 import { PatientsComponent } from './patients/patients.component';
 import { PatientsProfileComponent } from './patients-profile/patients-profile.component';
 import { LoginComponent } from './login/login.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { RegisterComponent } from './register/register.component';
+import { DoctorDetailsComponent } from './doctor-details/doctor-details.component';
+import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [
       {
@@ -25,13 +27,16 @@ export const routes: Routes = [
       { path: 'patient', component: PatientsComponent },
       { path: 'patient/:id', component: PatientsProfileComponent },
       { path: 'appointments', component: AppointmentsComponent },
+      { path: 'doctors/:id', component: DoctorDetailsComponent },
+      { path: 'profile', component: ProfileComponent },
+
     ]
   },
   {
     path: 'auth',
     children: [
       { path: 'login', component: LoginComponent },
-      { path: 'signUp', component: SignUpComponent },
+      { path: 'register', component: RegisterComponent },
     ]
   },
   { path: '**', component: NotFoundComponent }
