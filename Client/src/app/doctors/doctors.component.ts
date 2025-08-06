@@ -55,6 +55,10 @@ export class DoctorsComponent implements OnInit {
   }
 
   bookAppointment(doctorId: string) {
-    this.router.navigate(['/doctors', doctorId]);
+    this.router.navigate(['/doctor-details', doctorId]);
   }
+  goToDoctorDetails(doctorId: string) {
+  this.router.navigate(['/doctor', doctorId]);
 }
+}
+

@@ -47,7 +47,7 @@ const getAppointmentById = async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.id)
       .populate("doctor_id", "name email image ")
-      .populate("patient_id", "name email  ");
+      .populate("patient_id", "name email image ");
     if (!appointment) {
       return res.status(404).json({ message: "Appointment not found" });
     }
@@ -78,8 +78,8 @@ const getAppointmentsByEmail = async (req, res) => {
       role === "doctor" ? { doctor_id: user._id } : { patient_id: user._id };
 
     const appointments = await Appointment.find(query)
-      .populate("doctor_id", "name email ")
-      .populate("patient_id", "name email ");
+      .populate("doctor_id", "name email image ")
+      .populate("patient_id", "name email image ");
 
     res.status(200).json(appointments);
   } catch (error) {
@@ -186,7 +186,7 @@ const getMyAppointments = async (req, res) => {
     }
     const appointments = await Appointment.find(query)
       .populate("doctor_id", "name email image ")
-      .populate("patient_id", "name email ");
+      .populate("patient_id", "name email image");
     res.status(200).json(appointments);
   } catch (error) {
     res.status(500).json({

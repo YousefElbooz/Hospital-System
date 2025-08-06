@@ -23,28 +23,35 @@
   </div>
 
   <!-- Doctor Cards -->
-  <div class="cards-container">
-    @if (filteredDoctors.length > 0) {
-      @for (doc of filteredDoctors; track doc._id) {
-        <div class="doctor-card">
-          <img [src]="doc.image" alt="{{ doc.name }}" class="doctor-img" />
-          <h3 class="doctor-name">{{ doc.name }}</h3>
-          <p class="doctor-specialty">{{ doc.specialization }}</p>
-          <p class="doctor-info">📧 {{ doc.email }}</p>
-          <p class="doctor-info">📞 {{ doc.phone }}</p>
-          <p class="doctor-info">⚧️ {{ doc.gender }}</p>
-          <button class="animated-button" (click)="bookAppointment(doc._id)">
-            Book Now
-          </button>
-        </div>
-      }
-    } @else {
-      <p class="no-results">No doctors found matching your criteria.</p>
+  <!-- Doctor Cards -->
+<div class="cards-container">
+  @if (filteredDoctors.length > 0) {
+    @for (doc of filteredDoctors; track doc._id) {
+      <div
+        class="doctor-card cursor-pointer transition duration-300 hover:scale-105"
+        (click)="goToDoctorDetails(doc._id)"
+      >
+        <img [src]="doc.image" alt="{{ doc.name }}" class="doctor-img" />
+        <h3 class="doctor-name">{{ doc.name }}</h3>
+        <p class="doctor-specialty">{{ doc.specialization }}</p>
+        <p class="doctor-info">📧 {{ doc.email }}</p>
+        <p class="doctor-info">📞 {{ doc.phone }}</p>
+        <p class="doctor-info">⚧️ {{ doc.gender }}</p>
+
+        <button
+          class="animated-button"
+          (click)="bookAppointment(doc._id); $event.stopPropagation()"
+        >
+          Book Now
+        </button>
+      </div>
     }
-  </div>
+  } @else {
+    <p class="no-results">No doctors found matching your criteria.</p>
+  }
+</div>
+
 </div>
 
 <!-- Decorative Element -->
-<div
-  class="bg-[#173101] absolute border-b-8 border-e-2 border-l-2 border-[#ADFF2F] w-[20%] h-[10%] mt-[-5%] rounded-3xl ml-[5%]"
-></div>
+<div class="bg-[#173101] absolute border-b-8 border-e-2 border-l-2 border-[#ADFF2F] w-[10%] h-[5%] mt-[-70px] rounded-3xl ml-[15%]"></div>

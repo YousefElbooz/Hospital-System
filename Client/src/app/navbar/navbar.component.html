@@ -20,27 +20,13 @@
       >About</a
     >
   </li>
-  <li>
-    <a
-      class="animated-text"
-      routerLink="/doctors"
-      routerLinkActive="router-link-active"
-      >Doctors</a
-    >
-  </li>
+  
   <li>
     <a class="animated-text" href="#contact" routerLinkActive="router-link-active"
       >Contacts</a
     >
   </li>
-  <li>
-    <a
-      class="animated-text"
-      routerLink="/appointments"
-      routerLinkActive="router-link-active"
-      >Appointments</a
-    >
-  </li>
+  
 
   <!-- ✅ Show Dashboard only for Admin -->
   @if (role === 'admin') {
@@ -52,6 +38,40 @@
         >Dashboard</a
       >
     </li>
+  }@else if(role === 'doctor'){
+    <li>
+    <a
+      class="animated-text"
+      routerLink="/appointments"
+      routerLinkActive="router-link-active"
+      >Appointments</a
+    >
+    </li>
+    <li>
+    <a
+      class="animated-text"
+      routerLink="/doctors"
+      routerLinkActive="router-link-active"
+      >Doctors</a
+    >
+  </li>
+  }@else{
+    <li>
+    <a
+      class="animated-text"
+      routerLink="/appointments"
+      routerLinkActive="router-link-active"
+      >Appointments</a
+    >
+    </li>
+    <li>
+    <a
+      class="animated-text"
+      routerLink="/doctors"
+      routerLinkActive="router-link-active"
+      >Doctors</a
+    >
+  </li>
   }
 </ul>
 

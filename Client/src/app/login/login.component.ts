@@ -35,7 +35,7 @@ export class LoginComponent {
       next: () => {
         const userRole = this.auth.getRole();
         if (userRole === 'admin') this.router.navigate(['/admin']);
-        else if (userRole === 'doctor') this.router.navigate(['/doctor']);
+        else if (userRole === 'doctor') this.router.navigate(['/appointments']);
         else this.router.navigate(['/']);
       },
       error: (err) => {
