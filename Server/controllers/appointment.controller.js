@@ -92,18 +92,27 @@ const getAppointmentsByEmail = async (req, res) => {
 
 const deleteAppointment = async (req, res) => {
   try {
-    const appointment = await Appointment.findByIdAndDelete(req.params.id);
+    const appointment = await Appointment.findById(req.params.id);
     if (!appointment) {
       return res.status(404).json({ message: "Appointment not found" });
     }
+
+    if (appointment.state !== 'pending') {
+      return res.status(403).json({ message: "Only pending appointments can be cancelled" });
+    }
+
+    await Appointment.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "Appointment deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Error deleting appointment", error });
   }
 };
+
+
 const updateAppointmentStateAndDate = async (req, res) => {
   const { id } = req.params;
   const { newDate, newState } = req.body;
+  const { role } = req.user;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ message: "Invalid appointment ID" });
@@ -116,12 +125,27 @@ const updateAppointmentStateAndDate = async (req, res) => {
       return res.status(404).json({ message: "Appointment not found" });
     }
 
-    if (newDate) {
-      appointment.appointment_date = newDate;
+    // Prevent changing state if it's already confirmed
+    if (appointment.state === 'confirmed') {
+      return res.status(403).json({ message: "Confirmed appointments cannot be modified" });
     }
 
+    // Enforce role-based permission for state changes
     if (newState) {
+      if (role !== 'doctor') {
+        return res.status(403).json({ message: "Only doctors can update appointment state" });
+      }
+
+      if (!['confirmed', 'refused'].includes(newState)) {
+        return res.status(400).json({ message: "Invalid state update" });
+      }
+
       appointment.state = newState;
+    }
+
+    // Optionally allow date update (e.g., rescheduling)
+    if (newDate) {
+      appointment.appointment_date = newDate;
     }
 
     await appointment.save();

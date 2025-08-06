@@ -49,25 +49,36 @@ export class ProfileComponent implements OnInit {
   }
 
   saveChanges(): void {
-    const formData = new FormData();
-    formData.append('name', this.editableUser.name || '');
-    formData.append('email', this.editableUser.email || '');
-    if (this.editableUser.imageFile) {
-      formData.append('image', this.editableUser.imageFile);
+  const updates = {
+    name: this.editableUser.name,
+    email: this.editableUser.email,
+  };
+
+  // 1. Update profile fields
+  this.profileService.updateProfile(updates).subscribe({
+    next: (res) => {
+      this.user = res;
+      this.editMode = false;
+      alert('Profile updated!');
+    },
+    error: (err) => {
+      console.error(err);
+      alert('Failed to update profile');
     }
+  });
 
-    this.profileService.updateProfile(formData).subscribe({
-  next: (res) => {
-    this.user = res;
-    alert('Profile updated!');
-  },
-  error: (err) => {
-    console.error(err);
-    alert('Failed to update profile');
+  // 2. Upload image if selected
+  if (this.editableUser.imageFile) {
+    this.profileService.uploadProfileImage(this.editableUser.imageFile).subscribe({
+      next: (res) => {
+        this.user.image = res.imageUrl;
+        this.previewUrl = null;
+      },
+      error: (err) => console.error('Image upload failed', err)
+    });
   }
-});
+}
 
-  }
 
   cancelEdit(): void {
     this.editableUser = { ...this.user };

@@ -5,49 +5,55 @@
     alt="logo"
   />
 
-  <ul class="flex m-1 gap-4">
+<ul class="flex m-1 gap-4">
+  <li>
+    <a
+      class="animated-text"
+      routerLink="/"
+      routerLinkActive="router-link-active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Home</a
+    >
+  </li>
+  <li>
+    <a class="animated-text" href="#about" routerLinkActive="router-link-active"
+      >About</a
+    >
+  </li>
+  <li>
+    <a
+      class="animated-text"
+      routerLink="/doctors"
+      routerLinkActive="router-link-active"
+      >Doctors</a
+    >
+  </li>
+  <li>
+    <a class="animated-text" href="#contact" routerLinkActive="router-link-active"
+      >Contacts</a
+    >
+  </li>
+  <li>
+    <a
+      class="animated-text"
+      routerLink="/appointments"
+      routerLinkActive="router-link-active"
+      >Appointments</a
+    >
+  </li>
+
+  <!-- ✅ Show Dashboard only for Admin -->
+  @if (role === 'admin') {
     <li>
       <a
         class="animated-text"
-        routerLink="/"
+        routerLink="/admin/dashboard"
         routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        >Home</a
+        >Dashboard</a
       >
     </li>
-    <li>
-      <a
-        class="animated-text"
-        href="#about"
-        routerLinkActive="router-link-active"
-        >About</a
-      >
-    </li>
-    <li>
-      <a
-        class="animated-text"
-        routerLink="/doctors"
-        routerLinkActive="router-link-active"
-        >Doctors</a
-      >
-    </li>
-    <li>
-      <a
-        class="animated-text"
-        href="#contact"
-        routerLinkActive="router-link-active"
-        >Contacts</a
-      >
-    </li>
-    <li>
-      <a
-        class="animated-text"
-        routerLink="/appointments"
-        routerLinkActive="router-link-active"
-        >Appointments</a
-      >
-    </li>
-  </ul>
+  }
+</ul>
 
   @if (isLoggedIn) {
   <div class="buttons-container flex items-center mr-[-1%] gap-2">

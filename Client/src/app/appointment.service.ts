@@ -7,6 +7,8 @@ export interface Appointment {
   doctor_id: string;
   appointment_date: Date;
   state?: string;
+  newState?: 'confirmed' | 'refused';
+
 }
 
 const BASE_URL = 'http://localhost:4000';

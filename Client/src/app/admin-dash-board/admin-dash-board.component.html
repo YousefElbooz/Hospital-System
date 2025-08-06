@@ -1,0 +1,25 @@
+<div class="dashboard-container">
+  <h1>Admin Dashboard</h1>
+  <div class="card-grid">
+    <div class="card" (click)="navigateTo('doctors')" routerLinkActive="dashboard">
+      <h3>Doctors</h3>
+      <p>Manage doctors</p>
+    </div>
+    <div class="card" (click)="navigateTo('patients')" routerLinkActive="dashboard">
+      <h3>Patients</h3>
+      <p>Manage patients</p>
+    </div>
+    <div class="card" (click)="navigateTo('appointments')" routerLinkActive="dashboard">
+      <h3>Appointments</h3>
+      <p>Manage appointments</p>
+    </div>
+    <div class="card" (click)="navigateTo('reports')" routerLinkActive="dashboard">
+      <h3>Medical Reports</h3>
+      <p>Manage reports</p>
+    </div>
+    <div class="card" (click)="navigateTo('tests')" routerLinkActive="dashboard">
+      <h3>Medical Tests</h3>
+      <p>Manage tests</p>
+    </div>
+  </div>
+</div>

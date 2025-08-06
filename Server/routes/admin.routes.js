@@ -4,7 +4,12 @@ const {
   getUserById,
   updateUser,
   deleteUser,
-  getUserByEmail,
+  getUserByEmail,      
+  getAllPatients,
+  getPatientById,
+  createPatient,
+  updatePatient,
+  deletePatientOnly,
 } = require("../controllers/admin.controller");
 
 const authMiddleware = require("../middlewares/authMiddleware");
@@ -21,5 +26,9 @@ router.get("/users/email/:email", getUserByEmail);
 router.put("/users/id/:id", updateUser);
 
 router.delete("/users/id/:id", deleteUser);
-
+router.get("/patients", getAllPatients);
+router.get("/patients/:id", getPatientById);
+router.post("/patients", createPatient);
+router.put("/patients/:id", updatePatient);
+router.delete("/patients/:id", deletePatientOnly);
 module.exports = router;

@@ -1,5 +1,7 @@
   const   router = require("express").Router();
   const authMiddleware = require("../middlewares/authMiddleware");
+  const multer = require('multer');
+  const path = require('path');
   const { body } = require("express-validator");
   const {
     login,
@@ -7,9 +9,19 @@
     signupPatient,
     getProfile,
     adminLogin,
-    updateProfile
+    updateProfile,
+    uploadImage
   } = require("../controllers/auth.controller");
 
+  const storage = multer.diskStorage({
+  destination: 'uploads/',
+  filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    }
+  });
+  const upload = multer({ storage });
+
+  router.put("/profile/image", authMiddleware, upload.single('image'), uploadImage);
   router.post(
     "/login",
     [
@@ -53,4 +65,5 @@
   router.put("/profile", authMiddleware, updateProfile);
   router.get("/profile", authMiddleware, getProfile);
   router.post("/adminLogin", adminLogin);
+
   module.exports = router;

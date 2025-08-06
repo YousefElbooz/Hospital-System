@@ -1,38 +1,45 @@
-<div class="appointments">
-  <h2>My Appointments</h2>
+  <div class="appointments">
+    <h2>My Appointments</h2>
 
-  @if(appointments.length === 0){
-    <p>No appointments found.</p>
-  }
+    @if(appointments.length === 0){
+      <p>No appointments found.</p>
+    }
 
-  @for (appointment of appointments; track $index) {
-    <div class="appointment-card">
-      <img
-        [src]="appointment.doctor_id.image || 'assets/default-doctor.png'"
-        alt="Doctor Photo"
-        class="doctor-photo"
-      />
-      <h3>{{ appointment.doctor_id.name }}</h3>
+    @for (appointment of appointments; track $index) {
+      <div class="appointment-card">
+        <img
+          [src]="appointment.doctor_id.image || 'assets/default-doctor.png'"
+          alt="Doctor Photo"
+          class="doctor-photo"
+        />
+        <h3>{{ appointment.doctor_id.name }}</h3>
 
-      <p><strong>Date:</strong> {{ appointment.appointment_date | date: 'medium' }}</p>
-      <p><strong>State:</strong> {{ appointment.state }}</p>
-      <p><strong>Patient:</strong> {{ appointment.patient_id.name }}</p>
+        <p><strong>Date:</strong> {{ appointment.appointment_date | date: 'medium' }}</p>
+        <p><strong>State:</strong> {{ appointment.state }}</p>
+        <p><strong>Patient:</strong> {{ appointment.patient_id.name }}</p>
 
-      @if(userRole === 'doctor') {
-        <div class="btn-group">
-          <button class="btn confirm" (click)="updateState(appointment._id, 'confirmed')">
-            Confirm
+        @if (userRole === 'doctor') {
+          @if (appointment.state === 'pending') {
+            <div class="btn-group">
+              <button class="btn confirm" (click)="updateState(appointment._id, 'confirmed')">
+                Confirm
+              </button>
+              <button class="btn refuse" (click)="updateState(appointment._id, 'refused')">
+                Refuse
+              </button>
+            </div>
+        } @else {
+          <p class="info-text">This appointment is already {{ appointment.state }}</p>
+        }}@else {
+          @if (appointment.state === 'pending') {
+          <button class="btn cancel" (click)="delete(appointment._id)">
+            Cancel
           </button>
-          <button class="btn refuse" (click)="updateState(appointment._id, 'refused')">
-            Refuse
-          </button>
-        </div>
-      } @else {
-        <button class="btn cancel" (click)="delete(appointment._id)">
-          Cancel
-        </button>
-      }
-    </div>
-  }
-</div>
-<div class="bg-[#1c2c1c] absolute border-b-8 border-e-2 border-l-2 border-[#ADFF2F] w-[10%] h-[5%] mt-[-70px] rounded-3xl ml-[15%]"></div>
+          } @else {
+            <p class="info-text">Cannot cancel a {{ appointment.state }} appointment</p>
+          }
+        }
+      </div>
+    }
+  </div>
+  <div class="bg-[#1c2c1c] absolute border-b-8 border-e-2 border-l-2 border-[#ADFF2F] w-[10%] h-[5%] mt-[-70px] rounded-3xl ml-[15%]"></div>

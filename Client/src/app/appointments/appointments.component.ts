@@ -11,13 +11,18 @@ import { CommonModule } from '@angular/common';
 })
 export class AppointmentsComponent implements OnInit {
   appointments: any[] = [];
-  baseUrl = 'http://localhost:4000';
+  baseUrl = 'http://localhost:4000/appointments';
   userRole: string | null = null;
 
   constructor(private appointmentService: AppointmentService) {}
 
   ngOnInit(): void {
-    this.userRole = localStorage.getItem('role'); // Get user role
+    const user = localStorage.getItem('user');
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      this.userRole = parsedUser.role;
+    }
+  this.loadMyAppointments();
     this.loadMyAppointments();
   }
 
@@ -47,7 +52,7 @@ export class AppointmentsComponent implements OnInit {
   }
 
   updateState(id: string, newState: 'confirmed' | 'refused'): void {
-    this.appointmentService.updateAppointment(id, { state: newState }).subscribe({
+    this.appointmentService.updateAppointment(id, { newState: newState }).subscribe({
       next: () => {
         // Update UI instantly
         this.appointments = this.appointments.map(app =>

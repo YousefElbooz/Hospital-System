@@ -13,9 +13,28 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { RegisterComponent } from './register/register.component';
 import { DoctorDetailsComponent } from './doctor-details/doctor-details.component';
 import { ProfileComponent } from './profile/profile.component';
+import { adminGuard } from './admin-guard.guard';
+import { AdminDoctorsComponent } from './admin-doctors/admin-doctors.component';
+import { AdminPatientsComponent } from './admin-patients/admin-patients.component';
+import { AdminAppointmentsComponent } from './admin-appointments/admin-appointments.component';
+import { AdminReportsComponent } from './admin-reports/admin-reports.component';
+import { AdminTestsComponent } from './admin-tests/admin-tests.component';
+import { AdminDashBoardComponent } from './admin-dash-board/admin-dash-board.component';
 
 export const routes: Routes = [
-      {
+  {
+  path: 'admin',
+   canActivate: [adminGuard],
+  component: LayoutComponent, // or create a separate AdminLayoutComponent if you prefer
+  children: [
+    { path: 'doctors', component: AdminDoctorsComponent },
+    { path: 'dashboard', component: AdminDashBoardComponent },
+    { path: 'patients', component: AdminPatientsComponent },
+    { path: 'appointments', component: AdminAppointmentsComponent },
+    { path: 'reports', component: AdminReportsComponent },
+    { path: 'tests', component: AdminTestsComponent },
+  ]
+  },{
     path: '',
     component: LayoutComponent,
     children: [
