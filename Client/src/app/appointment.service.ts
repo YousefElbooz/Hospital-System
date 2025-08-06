@@ -63,8 +63,8 @@ getMyAppointments(): Observable<any> {
   }
 
   // ✅ Update appointment (e.g. change status)
-  updateAppointment(id: string, update: Partial<Appointment>): Observable<any> {
-    return this.http.patch(`${BASE_URL}/appointments/id/${id}`, update, {
+  updateAppointment(id: string): Observable<any> {
+    return this.http.patch(`${BASE_URL}/appointments/id/${id}`, {newState:'confirmed'}, {
       headers: this.getAuthHeaders()
     });
   }

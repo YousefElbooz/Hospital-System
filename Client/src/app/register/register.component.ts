@@ -10,17 +10,19 @@ import {
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { RouterLink } from '@angular/router';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink,NgIf ],
 })
 export class RegisterComponent {
   registerForm: FormGroup;
   submitted = false;
+  loader:Boolean=false
 
   constructor(
     private fb: FormBuilder,
@@ -72,8 +74,10 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
+
     this.submitted = true;
     if (this.registerForm.valid) {
+        this.loader=true
       const formData = this.registerForm.value;
       const role = formData.role;
 
@@ -84,6 +88,7 @@ export class RegisterComponent {
         gender: formData.gender,
         phone: formData.phone,
         dateOfBirth: formData.dateOfBirth,
+        image:"https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
         ...(role === 'doctor' && { specialization: formData.specialization }),
       };
 
@@ -92,8 +97,27 @@ export class RegisterComponent {
           ? this.auth.signupDoctor(payload)
           : this.auth.signupPatient(payload);
 
+
       request$.subscribe({
-        next: () => this.router.navigate(['/auth/login']),
+        next: () => {
+              this.auth.login({
+      email: formData.email,
+      password: formData.password,
+      role:"patient"}).subscribe({
+      next: () => {
+        const userRole = this.auth.getRole();
+        if (userRole === 'admin') this.router.navigate(['/admin']);
+        else if (userRole === 'doctor') this.router.navigate(['/doctors']);
+        else this.router.navigate(['/']);
+        this.loader=false
+      },
+      error: (err) => {
+        const errorMsg = err?.error?.message || err?.message || 'Login failed';
+        alert(errorMsg);
+         this.loader=false
+      }
+    })
+        },
         error: (err) => alert(err.error.message || 'Registration failed'),
       });
     }

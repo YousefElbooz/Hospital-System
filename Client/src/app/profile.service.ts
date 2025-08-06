@@ -17,6 +17,8 @@ export class ProfileService {
   updateProfile(data: any): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.put(this.apiUrl, data, { headers });
+    console.log(data.id)
+    console.log(data.dataObj)
+    return this.http.patch(`http://localhost:4000/admin/users/id/${data.id}`, data.dataObj, { headers });
   }
 }

@@ -162,7 +162,7 @@ const getMyAppointments = async (req, res) => {
     }
     const appointments = await Appointment.find(query)
       .populate("doctor_id", "name email image ")
-      .populate("patient_id", "name email ");
+      .populate("patient_id", "name email image");
     res.status(200).json(appointments);
   } catch (error) {
     res.status(500).json({

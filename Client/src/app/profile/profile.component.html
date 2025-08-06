@@ -1,82 +1,89 @@
 <div class="flex justify-center items-center m-[80px]">
-  <div class="relative bg-[#18230F] text-white rounded-2xl shadow-2xl border border-[#255F38] w-[95%] max-w-md pb-10 pt-20 px-6">
-    
+  <div
+    class="relative bg-[#18230F] text-white rounded-2xl shadow-2xl border border-[#255F38] w-[95%] max-w-md pb-10 pt-20 px-6"
+  >
     <!-- Profile Picture -->
     <div class="absolute -top-16 left-1/2 transform -translate-x-1/2">
-      @if (!editMode) {
-        @if (user?.image) {
-          <img [src]="user.image" alt="Profile" class="w-32 h-32 rounded-full border-4 border-[#1F7D53] shadow-lg object-cover bg-[#27391C]" />
-        } @else {
-          <div class="w-32 h-32 rounded-full bg-[#27391C] flex items-center justify-center text-5xl border-4 border-[#1F7D53] shadow-lg">
-            👤
-          </div>
-        }
+      @if (user?.image!=='') {
+      <img
+        [src]="user.image"
+        alt="Profile"
+        class="w-32 h-32 rounded-full border-4 border-[#1F7D53] shadow-lg object-cover bg-[#27391C]"
+      />
       } @else {
-        <label class="cursor-pointer">
-          <input type="file" (change)="onFileSelected($event)" hidden />
-          <div class="w-32 h-32 rounded-full bg-[#27391C] flex items-center justify-center border-4 border-[#1F7D53] shadow-lg overflow-hidden">
-            <img *ngIf="previewUrl" [src]="previewUrl" class="w-full h-full object-cover" />
-            <span *ngIf="!previewUrl" class="text-4xl">📷</span>
-          </div>
-        </label>
+      <div
+        class="w-32 h-32 rounded-full bg-[#27391C] flex items-center justify-center text-5xl border-4 border-[#1F7D53] shadow-lg"
+      >
+        👤
+      </div>
       }
     </div>
 
     <!-- Profile Info -->
     <div class="mt-6 text-center">
       @if (!editMode) {
-        <h2 class="text-2xl font-bold text-[#ADFF2F]">{{ user?.name }}</h2>
-        <p class="text-sm text-gray-300">{{ user?.email }}</p>
-        <p class="text-sm text-gray-400 mt-1 capitalize">{{ user?.role }}</p>
+      <h2 class="text-2xl font-bold text-[#ADFF2F]">{{ user?.name }}</h2>
+      <p class="text-sm text-gray-300">{{ user?.email }}</p>
+      <p class="text-sm text-gray-400 mt-1 capitalize">{{ user?.role }}</p>
       } @else {
-        <input [(ngModel)]="editableUser.name" class="bg-[#27391C] p-2 text-center rounded w-full mt-2 text-[#ADFF2F]" placeholder="Name" />
-        <input [(ngModel)]="editableUser.email" class="bg-[#27391C] p-2 text-center rounded w-full mt-2 text-gray-200" placeholder="Email" />
+      <input
+        [(ngModel)]="editableUser.name"
+        class="bg-[#27391C] p-2 text-center rounded w-full mt-2 text-[#ADFF2F]"
+        placeholder="Name"
+      />
+      <input
+        [(ngModel)]="editableUser.email"
+        class="bg-[#27391C] p-2 text-center rounded w-full mt-2 text-gray-200"
+        placeholder="Email"
+      />
+      <input
+        [(ngModel)]="editableUser.image"
+        class="bg-[#27391C] p-2 text-center rounded w-full mt-2 text-gray-200"
+        placeholder="IMAGE"
+      />
       }
-    </div>
-
-    <!-- Stats -->
-    <div class="grid grid-cols-3 gap-4 mt-8 text-center">
-      <div>
-        <p class="text-[#ADFF2F] text-lg font-semibold">{{ user?.friends || 0 }}</p>
-        <p class="text-sm text-gray-300">Friends</p>
-      </div>
-      <div>
-        <p class="text-[#ADFF2F] text-lg font-semibold">{{ user?.photos || 0 }}</p>
-        <p class="text-sm text-gray-300">Photos</p>
-      </div>
-      <div>
-        <p class="text-[#ADFF2F] text-lg font-semibold">{{ user?.comments || 0 }}</p>
-        <p class="text-sm text-gray-300">Comments</p>
-      </div>
     </div>
 
     <!-- Details -->
     <div class="mt-8 space-y-2">
       @for (entry of entries; track entry[0]) {
-        <div class="flex justify-between bg-[#27391C] hover:bg-[#1F7D53] transition-colors duration-300 rounded-xl p-4 shadow-sm border border-[#255F38]">
-          <span class="text-sm text-[#ADFF2F] font-medium uppercase tracking-wider">
-            {{ entry[0].replace('_', ' ') }}
-          </span>
-          <span class="text-sm font-medium break-all text-gray-100 text-right">
-            {{ entry[1] }}
-          </span>
-        </div>
+      <div
+        class="flex justify-between bg-[#27391C] hover:bg-[#1F7D53] transition-colors duration-300 rounded-xl p-4 shadow-sm border border-[#255F38]"
+      >
+        <span
+          class="text-sm text-[#ADFF2F] font-medium uppercase tracking-wider"
+        >
+          {{ entry[0].replace("_", " ") }}
+        </span>
+        <span class="text-sm font-medium break-all text-gray-100 text-right">
+          {{ entry[1] }}
+        </span>
+      </div>
       }
     </div>
 
     <!-- Action Buttons -->
     <div class="mt-8 flex justify-center gap-4">
       @if (!editMode) {
-        <button class="px-6 py-2 bg-[#1F7D53] hover:bg-[#255F38] rounded-full" (click)="editMode = true">
-          Edit Profile
-        </button>
+      <button
+        class="px-6 py-2 bg-[#1F7D53] hover:bg-[#255F38] rounded-full"
+        (click)="editMode = true"
+      >
+        Edit Profile
+      </button>
       } @else {
-        <button class="px-4 py-2 bg-[#1F7D53] hover:bg-[#255F38] rounded-full" (click)="saveChanges()">
-          Save
-        </button>
-        <button class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-full" (click)="cancelEdit()">
-          Cancel
-        </button>
+      <button
+        class="px-4 py-2 bg-[#1F7D53] hover:bg-[#255F38] rounded-full"
+        (click)="saveChanges()"
+      >
+        Save
+      </button>
+      <button
+        class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-full"
+        (click)="cancelEdit()"
+      >
+        Cancel
+      </button>
       }
     </div>
   </div>

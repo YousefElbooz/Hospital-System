@@ -15,6 +15,7 @@ export class ProfileComponent implements OnInit {
   editableUser: any = {};
   entries: [string, any][] = [];
   editMode = false;
+  id:number=0
   previewUrl: string | ArrayBuffer | null = null;
 
   constructor(private profileService: ProfileService) {}
@@ -27,36 +28,45 @@ export class ProfileComponent implements OnInit {
     this.profileService.getProfile().subscribe({
       next: (res) => {
         this.user = res;
+        // console.log(this.user)
         this.editableUser = { ...res };
+        this.id=this.user._id
         this.entries = Object.entries(res).filter(
-          ([key]) => key !== 'image' && key !== 'password' && key !== '__v'
+          ([key]) =>  key !== 'image'&& key !== 'password' && key !== '__v'
         );
       },
       error: (err) => console.error(err),
     });
+  
   }
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewUrl = reader.result;
-      };
-      reader.readAsDataURL(file);
-      this.editableUser.imageFile = file;
-    }
-  }
+  // onFileSelected(event: any): void {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       this.previewUrl = reader.result;
+  //     };
+  //     reader.readAsDataURL(file);
+  //     this.editableUser.imageFile = file;
+  //   }
+  // }
+  
 
   saveChanges(): void {
-    const formData = new FormData();
-    formData.append('name', this.editableUser.name || '');
-    formData.append('email', this.editableUser.email || '');
-    if (this.editableUser.imageFile) {
-      formData.append('image', this.editableUser.imageFile);
+    type myObj={
+    name:string;
+    email:string;
+    image:string
+  }
+    const dataObj :myObj = {
+      name:this.editableUser.name,
+      email:this.editableUser.email ,
+      image:this.editableUser.image 
     }
+  
 
-    this.profileService.updateProfile(formData).subscribe({
+    this.profileService.updateProfile({id:this.id,dataObj}).subscribe({
   next: (res) => {
     this.user = res;
     alert('Profile updated!');
@@ -66,6 +76,9 @@ export class ProfileComponent implements OnInit {
     alert('Failed to update profile');
   }
 });
+   this.cancelEdit()
+  window.location.reload();
+
 
   }
 

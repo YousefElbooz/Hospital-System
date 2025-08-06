@@ -10,16 +10,16 @@ const {
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");
 
-router.use(authMiddleware, roleMiddleware("admin"));
+router.use(authMiddleware);
 
-router.get("/users", getAllUsers);
+router.get("/users", roleMiddleware("admin"),getAllUsers);
 
-router.get("/users/id/:id", getUserById);
+router.get("/users/id/:id",roleMiddleware("admin") ,getUserById);
 
-router.get("/users/email/:email", getUserByEmail);
+router.get("/users/email/:email", roleMiddleware("admin"),getUserByEmail);
 
-router.put("/users/id/:id", updateUser);
+router.patch("/users/id/:id",updateUser);
 
-router.delete("/users/id/:id", deleteUser);
+router.delete("/users/id/:id", roleMiddleware("admin"),deleteUser);
 
 module.exports = router;

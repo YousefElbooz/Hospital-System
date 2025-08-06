@@ -19,7 +19,7 @@ export class AuthService {
   }
 
   login(data: { email: string; password: string; role: 'admin' | 'doctor' | 'patient' }) {
-    const endpoint = data.role === 'admin' ? 'adminLogin' : 'login';
+    const endpoint = 'login';
 
     return this.http.post<any>(`${this.baseUrl}/${endpoint}`, data).pipe(
       tap(res => {

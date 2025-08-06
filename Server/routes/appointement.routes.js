@@ -48,7 +48,6 @@ router.patch(
 router.delete(
   "/appointments/id/:id",
   authMiddleware,
-  roleMiddleware(["admin", "patient"]),
   deleteAppointment
 );
 router.get(

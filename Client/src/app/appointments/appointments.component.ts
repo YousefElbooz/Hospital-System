@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AppointmentService } from '../appointment.service';
 import { CommonModule } from '@angular/common';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-appointments',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,NgIf],
   templateUrl: './appointments.component.html',
   styleUrls: ['./appointments.component.css']
 })
@@ -17,8 +18,13 @@ export class AppointmentsComponent implements OnInit {
   constructor(private appointmentService: AppointmentService) {}
 
   ngOnInit(): void {
-    this.userRole = localStorage.getItem('role'); // Get user role
+   // Get user role
     this.loadMyAppointments();
+     const userString = localStorage.getItem('user');
+    if (userString) {
+      const user = JSON.parse(userString);
+      this.userRole = user.role;
+    }
   }
 
   loadMyAppointments(): void {
@@ -32,11 +38,19 @@ export class AppointmentsComponent implements OnInit {
               ? app.doctor_id.image
               : `${this.baseUrl}${app.doctor_id.image}`,
           },
+           patient_id: {
+            ...app.patient_id,
+            image: app.patient_id.image?.startsWith('http')
+              ? app.patient_id.image
+              : `${this.baseUrl}${app.patient_id.image}`,
+          }
         }));
       },
       error: (err) => console.error(err)
     });
   }
+
+
 
   delete(id: string): void {
     if (confirm('Are you sure you want to cancel this appointment?')) {
@@ -46,12 +60,12 @@ export class AppointmentsComponent implements OnInit {
     }
   }
 
-  updateState(id: string, newState: 'confirmed' | 'refused'): void {
-    this.appointmentService.updateAppointment(id, { state: newState }).subscribe({
+  updateState(id: string ): void {
+    this.appointmentService.updateAppointment(id).subscribe({
       next: () => {
         // Update UI instantly
         this.appointments = this.appointments.map(app =>
-          app._id === id ? { ...app, state: newState } : app
+          app._id === id ? { ...app, state: 'confirmed' } : app
         );
       },
       error: (err) => console.error(err)

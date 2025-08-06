@@ -17,29 +17,44 @@
       (change)="filterDoctors()"
     >
       @for (spec of specializations; track spec) {
-        <option [value]="spec">{{ spec }}</option>
+      <option [value]="spec">{{ spec }}</option>
       }
     </select>
   </div>
 
   <!-- Doctor Cards -->
   <div class="cards-container">
-    @if (filteredDoctors.length > 0) {
-      @for (doc of filteredDoctors; track doc._id) {
-        <div class="doctor-card">
-          <img [src]="doc.image" alt="{{ doc.name }}" class="doctor-img" />
-          <h3 class="doctor-name">{{ doc.name }}</h3>
-          <p class="doctor-specialty">{{ doc.specialization }}</p>
-          <p class="doctor-info">📧 {{ doc.email }}</p>
-          <p class="doctor-info">📞 {{ doc.phone }}</p>
-          <p class="doctor-info">⚧️ {{ doc.gender }}</p>
-          <button class="animated-button" (click)="bookAppointment(doc._id)">
-            Book Now
-          </button>
-        </div>
-      }
-    } @else {
-      <p class="no-results">No doctors found matching your criteria.</p>
+    @if (filteredDoctors.length > 0) { @for (doc of filteredDoctors; track
+    doc._id) {
+    <div class="doctor-card">
+      <img
+        *ngIf="doc.image.trim() === ''"
+        src="https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
+        alt="{{ doc.name }}"
+        class="doctor-img"
+      />
+      <img
+        *ngIf="doc.image.trim() !== ''"
+        [src]="doc.image"
+        alt="{{ doc.name }}"
+        class="doctor-img"
+      />
+
+      <h3 class="doctor-name">{{ doc.name }}</h3>
+      <p class="doctor-specialty">{{ doc.specialization }}</p>
+      <p class="doctor-info">📧 {{ doc.email }}</p>
+      <p class="doctor-info">📞 {{ doc.phone }}</p>
+      <p class="doctor-info">⚧️ {{ doc.gender }}</p>
+      <button
+        class="animated-button"
+        [ngClass]="userRole != 'patient' ? 'hide' : ''"
+        (click)="bookAppointment(doc._id)"
+      >
+        Book Now
+      </button>
+    </div>
+    } } @else {
+    <p class="no-results">No doctors found matching your criteria.</p>
     }
   </div>
 </div>

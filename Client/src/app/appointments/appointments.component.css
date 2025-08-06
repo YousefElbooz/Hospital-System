@@ -7,6 +7,9 @@
   border-radius: 20px;
   margin: 20px;
   margin-top: -1.5vh;
+  min-height: 100vh;
+
+
 }
 
 .appointment-card {
@@ -17,6 +20,7 @@
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(173, 255, 47, 0.3);
   color: white;
+  width: 50%;
 }
 
 .doctor-photo {
@@ -77,10 +81,16 @@ button {
   background-color: #a40000;
 }
 
-.cancel {
-  background-color: #444;
+.cancel{
+  background-color: #666;
+}
+.cancel:hover  {
+  background-color: #a40000;
 }
 
-.cancel:hover {
-  background-color: #666;
+.appointment-list{
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column;
+  gap: 30px;
 }

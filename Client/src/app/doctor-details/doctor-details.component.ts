@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DoctorService, Doctor } from '../doctors.service';
 import { AppointmentService, Appointment } from '../appointment.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-doctor-details',
@@ -24,7 +25,8 @@ export class DoctorDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private doctorService: DoctorService,
     private appointmentService: AppointmentService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -73,6 +75,9 @@ export class DoctorDetailsComponent implements OnInit {
         this.errorMessage = '';
         this.appointmentForm.reset({ patient_id: this.loggedInPatientId });
         this.submitted = false;
+        setTimeout(()=>{
+              this.router.navigate(['/appointments']);
+        },2000)
       },
       error: (err) => {
         this.errorMessage = err?.error?.message || 'Booking failed.';

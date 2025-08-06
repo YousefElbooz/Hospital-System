@@ -1,7 +1,6 @@
 const Doctor = require("../users/Doctor");
 const Patient = require("../users/Patient");
 
-
 const getAllUsers = async (req, res) => {
   try {
     const doctors = await Doctor.find({}, "-password");
@@ -15,12 +14,11 @@ const getAllUsers = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
-;
 const getUserById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    let user = await Doctor.findById(id) || await Patient.findById(id);
+    let user = (await Doctor.findById(id)) || (await Patient.findById(id));
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -35,7 +33,8 @@ const getUserByEmail = async (req, res) => {
   const { email } = req.params;
 
   try {
-    let user = await Doctor.findOne({ email }) || await Patient.findOne({ email });
+    let user =
+      (await Doctor.findOne({ email })) || (await Patient.findOne({ email }));
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -53,24 +52,21 @@ const updateUser = async (req, res) => {
 
   try {
     let user = await Doctor.findById(id);
-    if (user) {
-      Object.assign(user, updates);
-      await user.save();
-      return res.status(200).json({ message: "Doctor updated", user });
+    if (!user) user = await Patient.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    user = await Patient.findById(id);
-    if (user) {
-      Object.assign(user, updates);
-      await user.save();
-      return res.status(200).json({ message: "Patient updated", user });
-    }
+    Object.assign(user, updates);
+    await user.save();
 
-    res.status(404).json({ message: "User not found" });
+    res.status(200).json({ message: "User updated", user });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
+
 const deleteUser = async (req, res) => {
   const { id } = req.params;
 
@@ -93,12 +89,10 @@ const deleteUser = async (req, res) => {
   }
 };
 
-
-
 module.exports = {
   getAllUsers,
   getUserById,
   updateUser,
   deleteUser,
-  getUserByEmail
+  getUserByEmail,
 };

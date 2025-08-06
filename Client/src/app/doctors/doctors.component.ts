@@ -3,13 +3,14 @@ import { DoctorService, Doctor } from '../doctors.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
+import { NgClass } from '@angular/common';
+import { NgIf } from '@angular/common';
 @Component({
   selector: 'app-doctors',
   templateUrl: './doctors.component.html',
   styleUrls: ['./doctors.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule,NgClass,NgIf]
 })
 export class DoctorsComponent implements OnInit {
   doctors: Doctor[] = [];
@@ -18,6 +19,7 @@ export class DoctorsComponent implements OnInit {
   searchTerm = '';
   selectedSpecialization = 'All';
   specializations: string[] = [];
+  userRole: string | null = null;
 
   constructor(
     private doctorService: DoctorService,
@@ -25,6 +27,13 @@ export class DoctorsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log(this.filterDoctors())
+     const userString = localStorage.getItem('user');
+    if (userString) {
+      const user = JSON.parse(userString);
+      this.userRole = user.role;
+    }
+  
     this.doctorService.getAllDoctors().subscribe({
       next: (res) => {
         this.doctors = res;
@@ -49,10 +58,12 @@ export class DoctorsComponent implements OnInit {
       const matchesSpecialization =
         this.selectedSpecialization === 'All' ||
         doc.specialization === this.selectedSpecialization;
+        
 
       return matchesSearch && matchesSpecialization;
     });
   }
+
 
   bookAppointment(doctorId: string) {
     this.router.navigate(['/doctors', doctorId]);

@@ -11,16 +11,45 @@
 
     <!-- Name -->
     <label for="name">Full Name</label>
-    <input id="name" type="text" formControlName="name" placeholder="John Doe" />
+    <input
+      id="name"
+      type="text"
+      formControlName="name"
+      placeholder="John Doe"
+    />
+    @if (f['name'].invalid && (submitted || f['name'].touched)) {
+    <div class="auth-error"><span>Name is required.</span></div>
+    }
 
     <!-- Email -->
     <label for="email">Email Address</label>
-    <input id="email" type="email" formControlName="email" placeholder="you@example.com" />
+    <input
+      id="email"
+      type="email"
+      formControlName="email"
+      placeholder="you@example.com"
+    />
+    @if (f['email'].invalid && (submitted || f['email'].touched)) {
+    <div class="auth-error">
+      @if (f['email'].errors?.['required']) {
+      <span>Email is required.</span>
+      } @if (f['email'].errors?.['email']) {
+      <span>Invalid email format.</span>
+      }
+    </div>
+    }
 
     <!-- Phone -->
     <label for="phone">Phone Number</label>
-    <input id="phone" type="text" formControlName="phone" placeholder="0123456789" />
-
+    <input
+      id="phone"
+      type="text"
+      formControlName="phone"
+      placeholder="0123456789"
+    />
+    @if (f['phone'].invalid && (submitted || f['phone'].touched)) {
+    <div class="auth-error"><span>Phone is required.</span></div>
+    }
     <!-- Gender -->
     <label for="gender">Gender</label>
     <select id="gender" formControlName="gender" class="filter-select">
@@ -28,15 +57,23 @@
       <option value="male">Male</option>
       <option value="female">Female</option>
     </select>
+    @if (f['gender'].invalid &&( submitted || f['gender'].touched)) {
+    <div class="auth-error"><span>Gender is required.</span></div>
+    }
 
     <!-- Date of Birth (always visible) -->
     <label for="dateOfBirth">Date of Birth</label>
     <input id="dateOfBirth" type="date" formControlName="dateOfBirth" />
+    @if (f['dateOfBirth'].invalid && (submitted || f['dateOfBirth'].touched)) {
+    <div class="auth-error"><span>Date of birth is required.</span></div>
+    }
 
     <!-- Specialization (only shown when role is doctor) -->
     <label
       for="specialization"
-      [style.display]="registerForm.get('role')?.value === 'doctor' ? 'block' : 'none'"
+      [style.display]="
+        registerForm.get('role')?.value === 'doctor' ? 'block' : 'none'
+      "
     >
       Specialization
     </label>
@@ -45,12 +82,38 @@
       type="text"
       formControlName="specialization"
       placeholder="Cardiology"
-      [style.display]="registerForm.get('role')?.value === 'doctor' ? 'block' : 'none'"
+      [style.display]="
+        registerForm.get('role')?.value === 'doctor' ? 'block' : 'none'
+      "
     />
+    @if (f['specialization'].invalid && (submitted ||
+    f['specialization'].touched) && registerForm.get('role')?.value ===
+    'doctor') {
+    <div class="auth-error">
+      <span>Specialization is required for doctors.</span>
+    </div>
+    }
 
     <!-- Password -->
     <label for="password">Password</label>
-    <input id="password" type="password" formControlName="password" placeholder="********" />
+    <input
+      id="password"
+      type="password"
+      formControlName="password"
+      placeholder="********"
+    />
+    @if (f['password'].invalid && (submitted || f['password'].touched)) {
+    <div class="auth-error">
+      @if (f['password'].errors?.['required']) {
+      <span>Password is required.</span>
+      } @if (f['password'].errors?.['pattern']) {
+      <span
+        >Password must contain uppercase, special character, and be at least 8
+        characters long.</span
+      >
+      }
+    </div>
+    }
 
     <!-- Confirm Password -->
     <label for="confirmPassword">Confirm Password</label>
@@ -60,11 +123,29 @@
       formControlName="confirmPassword"
       placeholder="********"
     />
+    @if ((f['confirmPassword'].invalid && (submitted ||
+    f['confirmPassword'].touched)) || (registerForm.errors?.['passwordMismatch']
+    && submitted)) {
+    <div class="auth-error">
+      @if (f['confirmPassword'].errors?.['required']) {
+      <span>Confirm password is required.</span>
+      } @if (registerForm.errors?.['passwordMismatch']) {
+      <span>Passwords do not match.</span>
+      }
+    </div>
+    }
 
     <!-- Submit Button -->
-    <button type="submit" class="animated-button justify-center">
+    <button type="submit" class="animated-button justify-center" [disabled]="loader">
       <span class="circle"></span>
-      <span class="text">Register</span>
+      <span class="text" *ngIf="!loader">Register</span>
+      <span *ngIf="loader">
+        <span
+          class="spinner-border spinner-border-md"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </span>
       <svg class="arr-1" viewBox="0 0 46 16">
         <path d="M30.6 0l1.4 1.4-6.6 6.6H46v2H25.4l6.6 6.6-1.4 1.4L22.6 8z" />
       </svg>
