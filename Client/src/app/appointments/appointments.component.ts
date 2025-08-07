@@ -12,8 +12,8 @@ import { NgIf } from '@angular/common';
 })
 export class AppointmentsComponent implements OnInit {
   appointments: any[] = [];
-  baseUrl = 'http://localhost:4000';
-  userRole: string | null = null;
+  baseUrl = 'http://localhost:4000/myAppointments';
+  userRole: 'doctor' | 'patient' | null = null;
 
   constructor(private appointmentService: AppointmentService) {}
 
@@ -54,8 +54,11 @@ export class AppointmentsComponent implements OnInit {
 
   delete(id: string): void {
     if (confirm('Are you sure you want to cancel this appointment?')) {
-      this.appointmentService.deleteAppointment(id).subscribe(() => {
-        this.appointments = this.appointments.filter((app) => app._id !== id);
+      this.appointmentService.deleteAppointment(id).subscribe({
+        next: () => {
+          this.appointments = this.appointments.filter(app => app._id !== id);
+        },
+        error: (err) => console.error('Error deleting appointment:', err)
       });
     }
   }
@@ -63,12 +66,11 @@ export class AppointmentsComponent implements OnInit {
   updateState(id: string ): void {
     this.appointmentService.updateAppointment(id).subscribe({
       next: () => {
-        // Update UI instantly
         this.appointments = this.appointments.map(app =>
           app._id === id ? { ...app, state: 'confirmed' } : app
         );
       },
-      error: (err) => console.error(err)
+      error: (err) => console.error('Error updating appointment state:', err)
     });
   }
 }

@@ -1,0 +1,112 @@
+:host {
+  display: block;
+  border-radius: 20px;
+  margin: 20px;
+  margin-top: -1vh;
+  padding: 2rem;
+  background: linear-gradient(145deg, #1a2e12, #223611);
+  min-height: 80vh;
+  color: #f0fff0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.35);
+}
+
+h2 {
+  font-size: 2.4rem;
+  color: #ADFF2F;
+  margin-bottom: 1rem;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+p, ul {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #e3f6ce;
+  margin-bottom: 1rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 0.5rem;
+}
+
+ul li::before {
+  content: '•';
+  color: #ADFF2F;
+  margin-right: 0.5rem;
+}
+
+button {
+  background-color: #1F7D53;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1.2rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+button:hover {
+  background-color: #2fa066;
+  transform: translateY(-2px);
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
+.styled-table {
+  margin-top: 2rem;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #27391C;
+  color: white;
+  font-size: 1rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #3c4e2f;
+}
+
+.styled-table th {
+  background-color: #1F7D53;
+  color: #ADFF2F;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.styled-table td {
+  vertical-align: middle;
+  font-size: 1rem;
+  color: #d5f3d1;
+}
+
+.styled-table tr:hover {
+  background-color: #314c25;
+}
+
+.styled-table td button {
+  background-color: #b11212;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.styled-table td button:hover {
+  background-color: #e22a2a;
+}

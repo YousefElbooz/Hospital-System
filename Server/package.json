@@ -3,7 +3,7 @@
     "nodemon": "^3.1.10"
   },
   "scripts": {
-    "start": "nodemon indx.js"
+    "start": "nodemon index.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

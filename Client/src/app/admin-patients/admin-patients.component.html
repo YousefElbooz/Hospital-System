@@ -1,0 +1,74 @@
+<!-- src/app/admin-patients/admin-patients.component.html -->
+<div class="dashboard-container">
+  <h1>Manage Patients</h1>
+
+  <!-- Patient Form -->
+  <!-- Patient Form -->
+<form (ngSubmit)="submitPatient()" class="form-grid">
+  <input [(ngModel)]="name" name="name" placeholder="Name" required />
+  <input [(ngModel)]="email" name="email" placeholder="Email" required type="email" />
+  <input [(ngModel)]="phone" name="phone" placeholder="Phone" required />
+  <select [(ngModel)]="gender" name="gender" required>
+    <option value="" disabled>Select Gender</option>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+  </select>
+
+  <input [(ngModel)]="image" name="image" placeholder="Image URL (optional)" />
+
+  <!-- ✅ Password only shown when adding -->
+  @if (!editingPatient) {
+    <input
+      [(ngModel)]="password"
+      name="password"
+      type="password"
+      placeholder="Password"
+      required
+    />
+  }
+
+  <button type="submit">
+    @if (editingPatient) {
+      Update Patient
+    } @else {
+      Add Patient
+    }
+  </button>
+
+  @if (editingPatient) {
+    <button type="button" (click)="resetForm()">Cancel</button>
+  }
+</form>
+
+
+  <!-- Patients Table -->
+  <table class="table styled-table">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Gender</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (p of patients; track p._id) {
+        <tr>
+          <td>
+            <img [src]="p.image" width="40" height="40" style="border-radius: 50%" />
+          </td>
+          <td>{{ p.name }}</td>
+          <td>{{ p.email }}</td>
+          <td>{{ p.phone }}</td>
+          <td>{{ p.gender }}</td>
+          <td>
+            <button (click)="editPatient(p)">Edit</button>
+            <button (click)="deletePatient(p._id)">Delete</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,43 @@
+<div class="appointment-container">
+  <h2 class="title">Appointments</h2>
+  <p>Total Appointments: {{ appointments.length }}</p>
+
+  <div class="overflow-x-auto mt-6">
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>Doctor</th>
+          <th>Patient</th>
+          <th>Date</th>
+          <th>State</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for ( app of appointments; track app._id) {
+          <tr>
+            <td>
+              <div>
+                <strong>{{ app.doctor_id?.name }}</strong><br />
+                <small>{{ app.doctor_id?.email }}</small>
+              </div>
+            </td>
+            <td>
+              <div>
+                <strong>{{ app.patient_id?.name }}</strong><br />
+                <small>{{ app.patient_id?.email }}</small>
+              </div>
+            </td>
+            <td>{{ app.appointment_date | date: 'short' }}</td>
+            <td>{{ app.state }}</td>
+            <td>
+              <button (click)="deleteAppointment(app._id)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -97,10 +97,51 @@ const getMyMedicalTests = async (req, res) => {
   }
 };
 
+const getMedicalTestsByPatientId = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+
+    // Validate patient ID
+    if (!mongoose.Types.ObjectId.isValid(patientId)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid patient ID" });
+    }
+
+    // Check if patient exists
+    const patient = await Patient.findById(patientId);
+    if (!patient) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Patient not found" });
+    }
+
+    // Find all tests for this patient
+    const tests = await MedicalTest.find({ patient_id: patientId })
+      .populate("doctor_id", "name email")
+      .populate("patient_id", "name email")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: tests.length,
+      data: tests,
+    });
+  } catch (error) {
+    console.error("Error fetching patient medical tests:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching patient medical tests",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+};
+
 module.exports = {
   addMedicalTest,
   getAllMedicalTests,
   getMedicalTestById,
   deleteMedicalTest,
   getMyMedicalTests,
+  getMedicalTestsByPatientId,
 };

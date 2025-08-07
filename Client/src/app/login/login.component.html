@@ -1,13 +1,8 @@
 <div class="auth-container">
-  <form
-    #loginForm="ngForm"
-    (ngSubmit)="onSubmit(loginForm)"
-    class="auth-box"
-    novalidate
-  >
+  <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" class="auth-box" novalidate>
     <h2 class="auth-title">Welcome Back</h2>
 
-    <!-- Role Selection
+    <!-- Role Selection -->
     <label for="role">Login As</label>
     <select
       id="role"
@@ -19,7 +14,7 @@
       <option value="patient">Patient</option>
       <option value="doctor">Doctor</option>
       <option value="admin">Admin</option>
-    </select> -->
+    </select>
 
     <!-- Email Field -->
     <label for="email">Email Address</label>
@@ -34,13 +29,14 @@
       #emailRef="ngModel"
     />
     @if (emailRef.invalid && emailRef.touched) {
-    <div class="auth-error">
-      @if (emailRef.errors?.['required']) {
-      <span>Email is required.</span>
-      } @if (emailRef.errors?.['pattern']) {
-      <span>Invalid email format.</span>
-      }
-    </div>
+      <div class="auth-error">
+        @if (emailRef.errors?.['required']) {
+          <span>Email is required.</span>
+        }
+        @if (emailRef.errors?.['pattern']) {
+          <span>Invalid email format.</span>
+        }
+      </div>
     }
 
     <!-- Password Field -->
@@ -51,30 +47,19 @@
       name="password"
       required
       [(ngModel)]="password"
-      placeholder="********"
+      placeholder="****"
       #passRef="ngModel"
     />
     @if (passRef.invalid && passRef.touched) {
-    <div class="auth-error">
-      <span>Password is required.</span>
-    </div>
+      <div class="auth-error">
+        <span>Password is required.</span>
+      </div>
     }
 
     <!-- Submit Button -->
-    <button
-      type="submit"
-      class="animated-button w justify-center"
-      [disabled]="loader"
-    >
+    <button type="submit" class="animated-button w justify-center">
       <span class="circle"></span>
-      <span class="text" *ngIf="!loader">Login</span>
-      <span *ngIf="loader">
-        <span
-          class="spinner-border spinner-border-md"
-          role="status"
-          aria-hidden="true"
-        ></span>
-      </span>
+      <span class="text">Login</span>
       <svg class="arr-1" viewBox="0 0 46 16">
         <path d="M30.6 0l1.4 1.4-6.6 6.6H46v2H25.4l6.6 6.6-1.4 1.4L22.6 8z" />
       </svg>

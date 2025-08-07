@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { NgIf } from '@angular/common';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
@@ -15,7 +15,10 @@ export class NavbarComponent implements OnInit {
   userName = '';
   role = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private location: Location
+  ) {}
 
   ngOnInit(): void {
     const user = localStorage.getItem('user');
@@ -35,5 +38,14 @@ export class NavbarComponent implements OnInit {
     localStorage.clear();
     this.isLoggedIn = false;
     this.router.navigate(['/auth/login']);
+  }
+
+  // Navigation methods
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
+
+  isActive(route: string): boolean {
+    return this.location.path().includes(route);
   }
 }

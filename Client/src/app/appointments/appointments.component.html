@@ -57,7 +57,6 @@
       <p><strong>State:</strong> {{ appointment.state }}</p>
 
       @if(userRole === 'doctor') {
-
       <div class="btn-group" *ngIf="appointment.state == 'pending'">
         <button
           class="btn confirm"

@@ -1,4 +1,6 @@
-<div class="bg-[#18230F] z-10 relative ml-[5%] mt-3 h-[60px] rounded-2xl flex-wrap justify-between items-center pl-8 w-[90%] flex">
+<div
+  class="bg-[#18230F] z-10 relative ml-[5%] mt-3 h-[60px] rounded-2xl flex-wrap justify-between items-center pl-8 w-[90%] flex"
+>
   <img
     src="/assets_task_01k1rzh3zwfj9a093vb2fh15yb_1754258851_img_0.webp"
     class="w-[40px] h-[40px] rounded-full"
@@ -23,14 +25,7 @@
         >About</a
       >
     </li>
-    <li>
-      <a
-        class="animated-text"
-        routerLink="/doctors"
-        routerLinkActive="router-link-active"
-        >Doctors</a
-      >
-    </li>
+
     <li>
       <a
         class="animated-text"
@@ -39,6 +34,44 @@
         >Contacts</a
       >
     </li>
+
+    <!-- Show Medical Reports and Tests for logged-in users -->
+    @if (isLoggedIn) {
+    <li>
+      <a
+        class="animated-text cursor-pointer"
+        [routerLink]="['/my-medical-reports']"
+        routerLinkActive="router-link-active"
+        >My Medical Reports</a>
+    </li>
+    <li>
+      <a
+        class="animated-text cursor-pointer"
+        [routerLink]="['/my-medical-tests']"
+        routerLinkActive="router-link-active"
+        >My Medical Tests</a>
+    </li>
+    }
+
+    <!-- Show Dashboard only for Admin -->
+    @if (role === 'admin') {
+    <li>
+      <a
+        class="animated-text"
+        routerLink="/admin/dashboard"
+        routerLinkActive="router-link-active"
+        >Dashboard</a
+      >
+    </li>
+    <li>
+      <a
+        class="animated-text"
+        routerLink="/patients"
+        routerLinkActive="router-link-active"
+        >Patients</a
+      >
+    </li>
+    } @else if (role === 'doctor') {
     <li>
       <a
         class="animated-text"
@@ -47,11 +80,36 @@
         >Appointments</a
       >
     </li>
+    <li>
+      <a
+        class="animated-text"
+        routerLink="/patients"
+        routerLinkActive="router-link-active"
+        >Patients</a
+      >
+    </li>
+    } @else {
+    <li>
+      <a
+        class="animated-text"
+        routerLink="/appointments"
+        routerLinkActive="router-link-active"
+        >Appointments</a
+      >
+    </li>
+    <li>
+      <a
+        class="animated-text"
+        routerLink="/doctors"
+        routerLinkActive="router-link-active"
+        >Doctors</a
+      >
+    </li>
+    }
   </ul>
 
   @if (isLoggedIn) {
   <div class="buttons-container flex items-center mr-[-1%] gap-2">
-    
     <!-- Profile Button -->
     <button
       class="animated-button scale-[60%]"
@@ -91,7 +149,7 @@
       </svg>
     </button>
   </div>
-} @else {
+  } @else {
 
   <!-- Login Button -->
   <button
@@ -112,5 +170,5 @@
       ></path>
     </svg>
   </button>
-}
+  }
 </div>

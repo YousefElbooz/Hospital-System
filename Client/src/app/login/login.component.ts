@@ -9,14 +9,13 @@ import { NgIf } from '@angular/common';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   standalone: true,
-  imports: [FormsModule, RouterLink,NgIf]
+  imports: [FormsModule, RouterLink]
 })
 export class LoginComponent {
   email: string = '';
   password: string = '';
   role: 'doctor' | 'patient' | 'admin' = 'patient';
   submitted = false;
-  loader:Boolean=false
 
   emailPattern: string = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$';
 
@@ -25,7 +24,6 @@ export class LoginComponent {
   onSubmit(form: NgForm): void {
     this.submitted = true;
     if (form.invalid) return;
-    this.loader=true
 
     const loginData = {
       email: this.email,
@@ -36,14 +34,12 @@ export class LoginComponent {
     this.auth.login(loginData).subscribe({
       next: () => {
         const userRole = this.auth.getRole();
-        if (userRole === 'admin') this.router.navigate(['/admin']);
-        else if (userRole === 'doctor') this.router.navigate(['/doctors']);
+        if (userRole === 'admin') this.router.navigate(['/admin/dashboard']);
+        else if (userRole === 'doctor') this.router.navigate(['/appointments']);
         else this.router.navigate(['/']);
-        this.loader=false
       },
       error: (err) => {
         const errorMsg = err?.error?.message || err?.message || 'Login failed';
-           this.loader=false
         alert(errorMsg);
       }
     });

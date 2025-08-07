@@ -24,8 +24,9 @@
 
   <!-- Doctor Cards -->
   <div class="cards-container">
-    @if (filteredDoctors.length > 0) { @for (doc of filteredDoctors; track
-    doc._id) {
+    @if (filteredDoctors.length > 0) { 
+      @for (doc of filteredDoctors; track  doc._id)
+   {
     <div class="doctor-card">
       <img
         *ngIf="doc.image.trim() === ''"
@@ -53,13 +54,13 @@
         Book Now
       </button>
     </div>
-    } } @else {
+    }  } @else {
     <p class="no-results">No doctors found matching your criteria.</p>
-    }
-  </div>
+    } 
+ 
+</div>
+
 </div>
 
 <!-- Decorative Element -->
-<div
-  class="bg-[#173101] absolute border-b-8 border-e-2 border-l-2 border-[#ADFF2F] w-[20%] h-[10%] mt-[-5%] rounded-3xl ml-[5%]"
-></div>
+<div class="bg-[#173101] absolute border-b-8 border-e-2 border-l-2 border-[#ADFF2F] w-[10%] h-[5%] mt-[-70px] rounded-3xl ml-[15%]"></div>

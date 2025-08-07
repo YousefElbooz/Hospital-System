@@ -1,1 +1,80 @@
-<p>patients works!</p>
+<div class="patients-page">
+  <h2 class="section-title">Patients List</h2>
+
+  <!-- Search & Filter -->
+  <div class="filter-bar">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Search by name or email..."
+      [(ngModel)]="searchTerm"
+      (input)="filterPatients()"
+    />
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading patients...</p>
+    </div>
+  }
+  
+  <!-- Error State -->
+  @if (error && !isLoading) {
+    <div class="error-state">
+      <p>{{ error }}</p>
+      <button class="retry-button" (click)="loadPatients()">Retry</button>
+    </div>
+  }
+
+  <!-- Patients List -->
+  <div class="cards-container">
+    @if (filteredPatients.length > 0) {
+      @for (patient of filteredPatients; track patient._id) {
+        <div class="patient-card">
+          <img
+            *ngIf="!patient.image || patient.image.trim() === ''"
+            src="https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
+            alt="{{ patient.name }}"
+            class="patient-img"
+          />
+          <img
+            *ngIf="patient.image && patient.image.trim() !== ''"
+            [src]="patient.image"
+            alt="{{ patient.name }}"
+            class="patient-img"
+          />
+
+          <h3 class="patient-name">{{ patient.name }}</h3>
+          <p class="patient-info">📧 {{ patient.email }}</p>
+          <p class="patient-info">📞 {{ patient.phone || 'N/A' }}</p>
+          <p class="patient-info">⚧️ {{ patient.gender || 'N/A' }}</p>
+          @if (patient.age) {
+            <p class="patient-info">🎂 {{ patient.age }} years</p>
+          }
+          @if (patient.bloodType) {
+            <p class="patient-info">💉 {{ patient.bloodType }}</p>
+          }
+          
+          <div class="patient-actions">
+            <button class="view-details-btn" (click)="viewPatientDetails(patient._id)">
+              View Details
+            </button>
+            <button class="report-btn" (click)="createMedicalReport(patient._id)">
+              Create Report
+            </button>
+            <button class="test-btn" (click)="createMedicalTest(patient._id)">
+              Order Test
+            </button>
+          </div>
+        </div>
+      }
+    } @else if (!isLoading && !error) {
+      <p class="no-results">No patients found matching your criteria.</p>
+    }
+  </div>
+</div>
+
+<!-- Decorative Element -->
+<div class="bg-[#173101] absolute border-b-8 border-e-2 border-l-2 border-[#ADFF2F] w-[10%] h-[5%] mt-[-70px] rounded-3xl ml-[15%]"></div>

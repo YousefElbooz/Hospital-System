@@ -1,1 +1,376 @@
-<p>patients-profile works!</p>
+<div class="patient-profile-container">
+  <!-- Loading State -->
+  @if (isLoading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading patient details...</p>
+  </div>
+  }
+
+  <!-- Error State -->
+  @if (error && !isLoading) {
+  <div class="error-state">
+    <p>{{ error }}</p>
+    <button class="back-button" (click)="goBack()">Go Back</button>
+  </div>
+  }
+
+  <!-- Patient Details Card -->
+  @if (patient && !isLoading) {
+  <div class="patient-details-card">
+    <div class="patient-header">
+      <div class="patient-avatar">
+        <img
+          *ngIf="!patient.image || patient.image.trim() === ''"
+          src="https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
+          alt="{{ patient.name }}"
+          class="patient-image"
+        />
+        <img
+          *ngIf="patient.image && patient.image.trim() !== ''"
+          [src]="patient.image"
+          alt="{{ patient.name }}"
+          class="patient-image"
+        />
+      </div>
+      <div class="patient-info">
+        <h1 class="patient-name">{{ patient.name }}</h1>
+        <p class="patient-role">Patient</p>
+      </div>
+    </div>
+
+    <div class="patient-details">
+      <div class="detail-row">
+        <span class="detail-label">Email:</span>
+        <span class="detail-value">{{ patient.email || "N/A" }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Phone:</span>
+        <span class="detail-value">{{ patient.phone || "N/A" }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Gender:</span>
+        <span class="detail-value">{{ patient.gender || "N/A" }}</span>
+      </div>
+
+      @if (patient.age) {
+      <div class="detail-row">
+        <span class="detail-label">Age:</span>
+        <span class="detail-value">{{ patient.age }}</span>
+      </div>
+      } @if (patient.bloodType) {
+      <div class="detail-row">
+        <span class="detail-label">Blood Type:</span>
+        <span class="detail-value">{{ patient.bloodType }}</span>
+      </div>
+      } @if (patient.address) {
+      <div class="detail-row">
+        <span class="detail-label">Address:</span>
+        <span class="detail-value">{{ patient.address }}</span>
+      </div>
+      }
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="tabs">
+      <button 
+        class="tab-button" 
+        [class.active]="activeTab === 'reports'"
+        (click)="activeTab = 'reports'"
+      >
+        Medical Reports
+      </button>
+      <button 
+        class="tab-button"
+        [class.active]="activeTab === 'tests'"
+        (click)="activeTab = 'tests'"
+      >
+        Medical Tests
+      </button>
+    </div>
+
+    <!-- Reports Tab Content -->
+    <div class="tab-content" [class.active]="activeTab === 'reports'">
+      @if (patient.medicalReports && patient.medicalReports.length > 0) {
+      <div class="reports-container">
+        @for (report of patient.medicalReports; track report._id) {
+        <div class="report-card">
+          <div class="report-header">
+            <h4>{{ report.reportTitle || "Untitled Report" }}</h4>
+            <p class="report-date">
+              {{ report.reportDate | date : "mediumDate" }}
+            </p>
+            @if (report.doctor?.name) {
+            <p class="report-doctor">
+              Doctor: {{ report.doctor.name }} @if (report.doctor.email) { ({{
+                report.doctor.email
+              }}) }
+            </p>
+            }
+          </div>
+
+          <div class="report-content">
+            <p>{{ report.content }}</p>
+          </div>
+
+          @if (report.attachmentUrl) {
+          <div class="report-attachment">
+            <a
+              [href]="report.attachmentUrl"
+              target="_blank"
+              class="attachment-link"
+            >
+              <i class="fas fa-paperclip"></i> View Attachment
+            </a>
+          </div>
+          } @if (report.relatedTests && report.relatedTests.length > 0) {
+          <div class="related-tests">
+            <h5>Related Tests:</h5>
+            <ul>
+              @for (test of report.relatedTests; track test._id) {
+              <li>
+                {{ test.testName || "Unnamed Test" }} -
+                {{ test.status || "No status" }} ({{
+                  test.testDate | date : "shortDate"
+                }})
+              </li>
+              }
+            </ul>
+          </div>
+          } @else {
+          <p class="no-tests">No related tests for this report.</p>
+          }
+        </div>
+        }
+      </div>
+      } @else {
+      <p class="no-data">No medical records found for this patient.</p>
+      }
+    </div>
+
+    <!-- Tests Tab Content -->
+    <div class="tab-content" [class.active]="activeTab === 'tests'">
+      @if (patient.medicalTests && patient.medicalTests.length > 0) {
+      <div class="reports-container">
+        @for (test of patient.medicalTests; track test._id) {
+        <div class="report-card">
+          <div class="report-header">
+            <h4>{{ test.testType || "Unnamed Test" }}</h4>
+            <p class="report-date">
+              {{ test.testDate || test.createdAt | date : "mediumDate" }}
+            </p>
+            @if (test.doctor_id?.name) {
+            <p class="report-doctor">
+              Doctor: {{ test.doctor_id.name }} @if (test.doctor_id.email) { ({{
+                test.doctor_id.email
+              }}) }
+            </p>
+            }
+          </div>
+
+          <div class="report-content">
+            @if (test.result) {
+            <div class="detail-row">
+              <span class="detail-label">Result:</span>
+              <span class="detail-value">{{ test.result }}</span>
+            </div>
+            }
+
+            @if (test.notes) {
+            <div class="detail-row">
+              <span class="detail-label">Notes:</span>
+              <span class="detail-value">{{ test.notes }}</span>
+            </div>
+            }
+
+            @if (test.attachmentUrl) {
+            <div class="report-attachment">
+              <a [href]="test.attachmentUrl" target="_blank" class="attachment-link">
+                <i class="fas fa-paperclip"></i> View Test Results
+              </a>
+            </div>
+            }
+          </div>
+        </div>
+        }
+      </div>
+      } @else {
+      <p class="no-data">No medical tests found for this patient.</p>
+      }
+    </div>
+
+    <div class="action-buttons">
+      <button class="back-button" (click)="goBack()">Back to Patients</button>
+      <div class="action-buttons-right">
+        <button
+          class="create-test-button"
+          (click)="openTestForm()"
+        >
+          <i class="fas fa-flask"></i> New Test
+        </button>
+        <button
+          class="create-report-button"
+          (click)="openReportForm()"
+        >
+          <i class="fas fa-file-medical"></i> New Report
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+  
+  <!-- Create Report Popup -->
+  <div class="popup-overlay" *ngIf="showReportForm" (click)="closeReportForm()">
+    <div class="popup-content" (click)="$event.stopPropagation()">
+      <div class="popup-header">
+        <h3>Create New Medical Report</h3>
+        <button class="close-btn" (click)="closeReportForm()">&times;</button>
+      </div>
+      
+      <form (ngSubmit)="submitReport()" class="popup-form">
+        <div class="form-group">
+          <label for="reportTitle">Report Title</label>
+          <input 
+            type="text" 
+            id="reportTitle" 
+            name="reportTitle" 
+            [(ngModel)]="newReport.reportTitle" 
+            required
+            class="form-control"
+            placeholder="Enter report title">
+        </div>
+        
+        <div class="form-group">
+          <label for="content">Content</label>
+          <textarea 
+            id="content" 
+            name="content" 
+            [(ngModel)]="newReport.content" 
+            rows="5"
+            required
+            class="form-control"
+            placeholder="Enter report content"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="relatedTests">Related Tests (Optional)</label>
+          <select 
+            id="relatedTests" 
+            name="relatedTests" 
+            [(ngModel)]="newReport.relatedTests"
+            multiple
+            class="form-control">
+            <option *ngFor="let test of patient?.medicalTests || []" [value]="test._id">
+              {{ test.testType || 'Untitled Test' }} - {{ test.status || 'No status' }}
+            </option>
+          </select>
+          <small class="form-text text-muted">Hold Ctrl/Cmd to select multiple tests</small>
+        </div>
+        
+        <div class="form-group">
+          <label for="attachment">Attachment (Optional)</label>
+          <input 
+            type="file" 
+            id="attachment" 
+            name="attachment" 
+            (change)="onReportFileSelected($event)"
+            class="form-control">
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="closeReportForm()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+            {{ isSubmitting ? 'Creating...' : 'Create Report' }}
+          </button>
+        </div>
+        
+        <div *ngIf="formError" class="alert alert-danger mt-3">
+          {{ formError }}
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Create Test Popup -->
+  <div class="popup-overlay" *ngIf="showTestForm" (click)="closeTestForm()">
+    <div class="popup-content" (click)="$event.stopPropagation()">
+      <div class="popup-header">
+        <h3>Create New Medical Test</h3>
+        <button class="close-btn" (click)="closeTestForm()">&times;</button>
+      </div>
+      
+      <form (ngSubmit)="submitTest()" class="popup-form">
+        <div class="form-group">
+          <label for="testType">Test Type</label>
+          <input 
+            type="text" 
+            id="testType" 
+            name="testType" 
+            [(ngModel)]="newTest.testType" 
+            required
+            class="form-control"
+            placeholder="E.g., Blood Test, X-Ray, MRI">
+        </div>
+        
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select 
+            id="status" 
+            name="status" 
+            [(ngModel)]="newTest.status" 
+            class="form-control">
+            <option value="pending">Pending</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="result">Result (Optional)</label>
+          <input 
+            type="text" 
+            id="result" 
+            name="result" 
+            [(ngModel)]="newTest.result" 
+            class="form-control"
+            placeholder="Enter test result">
+        </div>
+        
+        <div class="form-group">
+          <label for="notes">Notes (Optional)</label>
+          <textarea 
+            id="notes" 
+            name="notes" 
+            [(ngModel)]="newTest.notes" 
+            rows="3"
+            class="form-control"
+            placeholder="Enter any additional notes"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="testAttachment">Attachment (Optional)</label>
+          <input 
+            type="file" 
+            id="testAttachment" 
+            name="testAttachment" 
+            (change)="onTestFileSelected($event)"
+            class="form-control">
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="closeTestForm()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+            {{ isSubmitting ? 'Creating...' : 'Create Test' }}
+          </button>
+        </div>
+        
+        <div *ngIf="formError" class="alert alert-danger mt-3">
+          {{ formError }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

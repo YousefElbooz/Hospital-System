@@ -9,6 +9,7 @@ const {
   getMedicalTestById,
   deleteMedicalTest,
   getMyMedicalTests,
+  getMedicalTestsByPatientId
 } = require("../controllers/medicaltest.controller");
 
 router.post(
@@ -46,6 +47,14 @@ router.get(
   authMiddleware,
   roleMiddleware(["doctor", "patient"]),
   getMyMedicalTests
+);
+
+// Get all medical tests for a specific patient (for doctors/admins)
+router.get(
+  "/medical-tests/patient/:patientId",
+  authMiddleware,
+  roleMiddleware(["doctor", "admin"]),
+  getMedicalTestsByPatientId
 );
 
 module.exports = router;

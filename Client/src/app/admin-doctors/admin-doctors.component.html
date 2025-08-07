@@ -1,0 +1,72 @@
+<div class="dashboard-container">
+  <h1>Manage Doctors</h1>
+
+  <!-- Doctor Form -->
+<form (ngSubmit)="submitDoctor()" class="form-grid">
+  <input [(ngModel)]="name" name="name" placeholder="Name" required />
+  <input [(ngModel)]="email" name="email" placeholder="Email" required type="email" />
+  <input [(ngModel)]="phone" name="phone" placeholder="Phone" required />
+  <input [(ngModel)]="specialization" name="specialization" placeholder="Specialization" required />
+
+  <select [(ngModel)]="gender" name="gender" required>
+    <option value="" disabled selected>Select Gender</option>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+  </select>
+
+  <!-- ✅ Password field shown only when adding -->
+  @if (!editingDoctor) {
+    <input
+      [(ngModel)]="password"
+      name="password"
+      placeholder="Password"
+      required
+      type="password"
+    />
+  }
+
+  <input [(ngModel)]="image" name="image" placeholder="Image URL" />
+
+  <button type="submit">
+    @if (editingDoctor) { Update Doctor } @else { Add Doctor }
+  </button>
+
+  @if (editingDoctor) {
+    <button type="button" (click)="resetForm()">Cancel</button>
+  }
+</form>
+
+
+  <!-- Doctors Table -->
+  <table class="table styled-table">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Specialization</th>
+        <th>Gender</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (doc of doctors; track doc._id) {
+        <tr>
+          <td>
+            <img [src]="doc.image" width="40" height="40" style="border-radius: 50%;" />
+          </td>
+          <td>{{ doc.name }}</td>
+          <td>{{ doc.email }}</td>
+          <td>{{ doc.phone }}</td>
+          <td>{{ doc.specialization }}</td>
+          <td>{{ doc.gender }}</td>
+          <td>
+            <button (click)="editDoctor(doc)">Edit</button>
+            <button (click)="deleteDoctor(doc._id)">Delete</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

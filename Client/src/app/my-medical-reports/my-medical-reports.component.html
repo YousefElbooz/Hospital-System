@@ -1,0 +1,83 @@
+<div class="container py-8">
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-8">My Medical Reports</h1>
+    
+    <!-- Loading State -->
+    @if (isLoading) {
+      <div class="flex justify-center items-center h-64">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+      </div>
+    }
+    
+    <!-- Error State -->
+    @if (error) {
+      <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded" role="alert">
+        <p class="font-bold">Error</p>
+        <p>{{ error }}</p>
+      </div>
+    }
+    
+    <!-- Reports List -->
+    @if (!isLoading && !error) {
+      <div class="space-y-6">
+        @for (report of reports; track report._id) {
+          <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-6">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ report.reportTitle || 'Untitled Report' }}</h2>
+                  <div class="text-sm text-gray-500 mb-3">
+                    <span>Date: {{ report.reportDate | date:'mediumDate' }}</span>
+                    <span class="mx-2">•</span>
+                    <span>Doctor: {{ report.doctor?.name || 'N/A' }}</span>
+                  </div>
+                </div>
+                <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                  {{ report.status || 'Completed' }}
+                </span>
+              </div>
+              
+              <div class="mt-4 text-gray-600">
+                <p class="whitespace-pre-line">{{ report.content || 'No content available.' }}</p>
+              </div>
+              
+              @if (report.relatedTests && report.relatedTests.length > 0) {
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                  <h3 class="text-sm font-medium text-gray-500 mb-2">RELATED TESTS</h3>
+                  <div class="flex flex-wrap gap-2">
+                    @for (test of report.relatedTests; track test._id) {
+                      <span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded">
+                        {{ test.testName || 'Test' }}
+                      </span>
+                    }
+                  </div>
+                </div>
+              }
+              
+              @if (report.attachmentUrl) {
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                  <a [href]="report.attachmentUrl" 
+                     target="_blank" 
+                     class="inline-flex items-center text-blue-600 hover:underline">
+                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                    </svg>
+                    View Attachment
+                  </a>
+                </div>
+              }
+            </div>
+          </div>
+        } @empty {
+          <div class="text-center py-12 bg-white rounded-lg shadow">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">No reports</h3>
+            <p class="mt-1 text-sm text-gray-500">You don't have any medical reports yet.</p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

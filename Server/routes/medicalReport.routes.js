@@ -9,6 +9,7 @@ const {
   deleteMedicalReportById,
   getMedicalReportById,
   getMyMedicalTests,
+  getPatientMedicalReports,
 } = require("../controllers/medicalReportController");
 
 router.post(
@@ -19,7 +20,7 @@ router.post(
     body("doctor").notEmpty().withMessage("Doctor ID is Required"),
     body("reportTitle").notEmpty().withMessage("Report Tilte is Required"),
     body("content").notEmpty().withMessage("Content is Required"),
-    body("attachmentUrl").notEmpty().withMessage("Attachment URL is Required")
+    body("attachmentUrl").notEmpty().withMessage("Attachment URL is Required"),
   ],
   authMiddleware,
   roleMiddleware(["admin", "doctor"]),
@@ -45,5 +46,13 @@ router.delete(
   deleteMedicalReportById
 );
 router.get("/my-tests", authMiddleware, getMyMedicalTests);
+
+// Get medical reports for a specific patient
+router.get(
+  "/patient/:patientId",
+  authMiddleware,
+  roleMiddleware(["admin", "doctor"]),
+  getPatientMedicalReports
+);
 
 module.exports = router;

@@ -19,7 +19,11 @@ export class AuthService {
   }
 
   login(data: { email: string; password: string; role: 'admin' | 'doctor' | 'patient' }) {
-    const endpoint = 'login';
+   
+    let endpoint = 'login';
+    if (data.role=='admin') {
+        endpoint='adminLogin';
+    };
 
     return this.http.post<any>(`${this.baseUrl}/${endpoint}`, data).pipe(
       tap(res => {
@@ -81,5 +85,11 @@ export class AuthService {
   getUserImage(): string | null {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user).img : null;
+  }
+
+  // Get the current user object
+  getCurrentUser(): any | null {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
   }
 }
